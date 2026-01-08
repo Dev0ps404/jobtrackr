@@ -1,9 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-// src/index.js
-import "./index.css"; // ✅ ye hona chahiye
+import App from "./App";
+import "./index.css"; // ✅ ONLY CSS IMPORT
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
