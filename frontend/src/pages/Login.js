@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
+import api from "../utils/api"; // ✅ ADDED
 
 function Login() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   // EMAIL LOGIN
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -15,12 +16,19 @@ function Login() {
       return;
     }
 
-    // ✅ SAVE USER INFO
-    localStorage.setItem("isAuth", "true");
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userName", email.split("@")[0]);
+    try {
+      // ✅ BACKEND LOGIN CALL (ADDED)
+      const res = await api.post("/api/auth/login", { email });
 
-    navigate("/dashboard");
+      // ✅ SAVE USER INFO (SAME IDEA, MORE COMPLETE)
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userEmail", res.data.user.email);
+      localStorage.setItem("userName", res.data.user.name);
+
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
   };
 
   return (

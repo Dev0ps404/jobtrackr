@@ -1,19 +1,33 @@
 import React, { useState } from "react";
-import API from "../services/api";
+import { useNavigate } from "react-router-dom"; // ✅ ADDED
+import api from "../utils/api"; // ✅ ADDED (same api used in Login)
 
 function Register({ onRegister }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // ✅ ADDED
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await API.post("/auth/register", {
-      name,
-      email,
-      password,
-    });
-    onRegister();
+
+    try {
+      // ✅ BACKEND REGISTER CALL (UPDATED)
+      await api.post("/api/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      // ✅ EXISTING FLOW PRESERVED
+      if (onRegister) {
+        onRegister();
+      } else {
+        navigate("/login"); // fallback safety
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    }
   };
 
   return (
@@ -27,7 +41,8 @@ function Register({ onRegister }) {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <br /><br />
+        <br />
+        <br />
 
         <input
           placeholder="Email"
@@ -35,7 +50,8 @@ function Register({ onRegister }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <br /><br />
+        <br />
+        <br />
 
         <input
           type="password"
@@ -44,7 +60,8 @@ function Register({ onRegister }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <br /><br />
+        <br />
+        <br />
 
         <button type="submit">Register</button>
       </form>

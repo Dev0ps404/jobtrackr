@@ -1,5 +1,5 @@
 import React from "react";
-import API from "../services/api";
+import API from "../utils/api";
 
 /* ---------- Deadline Highlight ---------- */
 const getDeadlineStyle = (deadline) => {
@@ -7,9 +7,7 @@ const getDeadlineStyle = (deadline) => {
 
   const today = new Date();
   const dueDate = new Date(deadline);
-  const diffDays = Math.ceil(
-    (dueDate - today) / (1000 * 60 * 60 * 24)
-  );
+  const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
 
   if (diffDays < 0) return { borderLeft: "6px solid #d32f2f" };
   if (diffDays <= 3) return { borderLeft: "6px solid #f9a825" };
@@ -62,9 +60,7 @@ function JobList({ jobs, refresh }) {
           {job.priority && (
             <p>
               <strong>Priority:</strong>{" "}
-              <span style={getPriorityStyle(job.priority)}>
-                {job.priority}
-              </span>
+              <span style={getPriorityStyle(job.priority)}>{job.priority}</span>
             </p>
           )}
 
@@ -77,9 +73,7 @@ function JobList({ jobs, refresh }) {
 
           <select
             value={job.status}
-            onChange={(e) =>
-              updateStatus(job._id, e.target.value)
-            }
+            onChange={(e) => updateStatus(job._id, e.target.value)}
             style={{ padding: "6px", marginTop: "5px" }}
           >
             <option>Applied</option>

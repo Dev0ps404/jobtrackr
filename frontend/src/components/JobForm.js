@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import API from "../services/api";
+import API from "../utils/api";
 
 function JobForm({ refresh }) {
   const [form, setForm] = useState({
