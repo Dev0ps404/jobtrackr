@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Profile() {
   const navigate = useNavigate();
@@ -9,6 +9,14 @@ function Profile() {
   const userPhoto = localStorage.getItem("userPhoto");
 
   const [photoError, setPhotoError] = useState(false);
+
+  /* ✅ ONLY REQUIRED useEffect (AUTH GUARD) */
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.clear();
