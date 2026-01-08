@@ -1,10 +1,33 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import DashboardSidebar from "../components/DashboardSidebar";
 import DashboardTopbar from "../components/DashboardTopbar";
 
 function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  /* ✅ AUTH GUARD — ONLY FOR DASHBOARD ROUTES */
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const protectedRoutes = [
+      "/dashboard",
+      "/applications",
+      "/analytics",
+      "/profile",
+      "/settings",
+    ];
+
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      location.pathname.startsWith(route)
+    );
+
+    if (isProtectedRoute && !token) {
+      navigate("/login");
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <div
