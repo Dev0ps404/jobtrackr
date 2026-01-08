@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
   const navigate = useNavigate();
+
   return (
     <>
       <PublicNavbar />
@@ -20,7 +21,7 @@ function LandingPage() {
         <div
           style={{
             position: "absolute",
-            right: "-160px", // 👈 pehle zyada right tha
+            right: "-160px",
             top: "-180px",
             width: "640px",
             height: "640px",
@@ -36,7 +37,7 @@ function LandingPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "40px", // 👈 spacing controlled
+            gap: "40px",
             padding: "120px 0",
             position: "relative",
             zIndex: 1,
@@ -66,7 +67,7 @@ function LandingPage() {
           <div
             className="hero-image-wrapper"
             style={{
-              transform: "translateX(-95px)", // ✅ MAIN FIX (left shift)
+              transform: "translateX(-95px)",
               maxWidth: "460px",
               width: "100%",
             }}
