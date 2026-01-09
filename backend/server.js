@@ -1,6 +1,15 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const path = require("path");
+
+/* 🔥 FORCE DOTENV LOAD */
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+
+console.log("ENV CHECK 👉", {
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  JWT_SECRET: process.env.JWT_SECRET ? "OK" : "MISSING",
+  MONGO_URI: process.env.MONGO_URI ? "OK" : "MISSING",
+});
 
 // Database connection
 const connectDB = require("./config/db");
@@ -25,13 +34,13 @@ app.get("/", (req, res) => {
   res.send("JobTrackr Backend is running 🚀");
 });
 
-// Auth routes (login / register)
+// Auth routes
 app.use("/api/auth", authRoutes);
 
-// Protected application routes
+// Application routes
 app.use("/api/applications", applicationRoutes);
 
-/* -------------------- ERROR HANDLING (BASIC) -------------------- */
+/* -------------------- ERROR HANDLING -------------------- */
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Server Error" });
