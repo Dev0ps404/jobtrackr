@@ -41,11 +41,34 @@ function DashboardCards({ jobs = [], loading }) {
 }
 
 const Card = ({ title, value, icon, accent }) => (
-  <div style={{ ...card, borderTop: `5px solid ${accent}` }}>
+  <div
+    style={{
+      ...card,
+      borderTop: `5px solid ${accent}`,
+      transition: "all 0.35s ease",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-10px) scale(1.03)";
+      e.currentTarget.style.boxShadow = "0 30px 80px rgba(2,6,23,0.18)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0) scale(1)";
+      e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.08)";
+    }}
+  >
     <div style={top}>
-      <span style={{ fontSize: "22px" }}>{icon}</span>
+      <span
+        style={{
+          fontSize: "22px",
+          transition: "transform 0.3s ease",
+        }}
+      >
+        {icon}
+      </span>
       <h4>{title}</h4>
     </div>
+
     <h2>
       <AnimatedNumber value={value} />
     </h2>

@@ -137,6 +137,16 @@ const Card = ({ title, children }) => (
       padding: "24px",
       boxShadow: "0 20px 40px rgba(2,6,23,0.1)",
       border: "1px solid #e5e7eb",
+      transition: "all 0.35s ease",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-10px) scale(1.03)";
+      e.currentTarget.style.boxShadow = "0 30px 80px rgba(2,6,23,0.18)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0) scale(1)";
+      e.currentTarget.style.boxShadow = "0 20px 40px rgba(2,6,23,0.1)";
     }}
   >
     <h3 style={{ marginBottom: "16px" }}>{title}</h3>
@@ -152,6 +162,16 @@ const StatCard = ({ title, value, color }) => (
       padding: "22px",
       boxShadow: "0 16px 32px rgba(2,6,23,0.08)",
       borderLeft: `6px solid ${color}`,
+      transition: "all 0.35s ease",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-8px)";
+      e.currentTarget.style.boxShadow = "0 26px 60px rgba(2,6,23,0.15)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0)";
+      e.currentTarget.style.boxShadow = "0 16px 32px rgba(2,6,23,0.08)";
     }}
   >
     <p style={{ color: "#64748b", marginBottom: "6px" }}>{title}</p>

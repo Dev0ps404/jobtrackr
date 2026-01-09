@@ -37,9 +37,25 @@ const Column = ({ title, color, children }) => (
 );
 
 const Card = ({ job }) => (
-  <div style={card}>
+  <div
+    style={{
+      ...card,
+      transition: "all 0.3s ease",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+      e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,6,23,0.15)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateY(0) scale(1)";
+      e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.08)";
+    }}
+  >
     <strong>{job.companyName}</strong>
-    <p style={{ fontSize: "14px", color: "#475569" }}>{job.role}</p>
+    <p style={{ fontSize: "14px", color: "#475569", marginTop: "4px" }}>
+      {job.role}
+    </p>
   </div>
 );
 
