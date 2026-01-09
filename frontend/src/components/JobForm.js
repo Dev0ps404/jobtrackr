@@ -45,10 +45,7 @@ function JobForm({ refresh }) {
 
       refresh();
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "Something went wrong while adding application"
-      );
+      alert("Failed to add application");
     } finally {
       setLoading(false);
     }
@@ -58,32 +55,40 @@ function JobForm({ refresh }) {
     <form
       onSubmit={submitHandler}
       style={{
-        background: "#fff",
-        padding: "28px",
-        borderRadius: "14px",
-        marginBottom: "32px",
-        boxShadow: "0 10px 30px rgba(2,6,23,0.08)",
+        background: "linear-gradient(180deg, #ffffff, #f8fafc)",
+        padding: "36px",
+        borderRadius: "20px",
+        marginBottom: "40px",
+        boxShadow: "0 25px 60px rgba(2,6,23,0.12)",
+        border: "1px solid #e5e7eb",
       }}
     >
-      <h2 style={{ marginBottom: "20px" }}>Add Application</h2>
+      {/* HEADER */}
+      <div style={{ marginBottom: "28px" }}>
+        <h2 style={{ margin: 0, fontSize: "28px", fontWeight: 700 }}>
+          Add Application
+        </h2>
+        <p style={{ color: "#64748b", marginTop: "6px" }}>
+          Track a new job opportunity
+        </p>
+      </div>
 
-      {/* GRID FORM */}
+      {/* GRID */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: "16px",
+          gap: "18px",
         }}
       >
-        <input
+        <Input
           name="companyName"
           placeholder="Company Name"
           value={form.companyName}
           onChange={handleChange}
           required
         />
-
-        <input
+        <Input
           name="role"
           placeholder="Role / Position"
           value={form.role}
@@ -91,54 +96,52 @@ function JobForm({ refresh }) {
           required
         />
 
-        <select name="jobType" value={form.jobType} onChange={handleChange}>
-          <option value="Full-time">Full-time</option>
-          <option value="Internship">Internship</option>
-          <option value="Remote">Remote</option>
-        </select>
+        <Select name="jobType" value={form.jobType} onChange={handleChange}>
+          <option>Full-time</option>
+          <option>Internship</option>
+          <option>Remote</option>
+        </Select>
 
-        <input
+        <Input
           name="location"
           placeholder="Location"
           value={form.location}
           onChange={handleChange}
         />
-
-        <input
+        <Input
           name="salary"
           placeholder="CTC / Stipend"
           value={form.salary}
           onChange={handleChange}
         />
 
-        <select name="source" value={form.source} onChange={handleChange}>
-          <option value="LinkedIn">LinkedIn</option>
-          <option value="Company Website">Company Website</option>
-          <option value="Referral">Referral</option>
-          <option value="Other">Other</option>
-        </select>
+        <Select name="source" value={form.source} onChange={handleChange}>
+          <option>LinkedIn</option>
+          <option>Company Website</option>
+          <option>Referral</option>
+          <option>Other</option>
+        </Select>
 
-        <input
+        <Input
           type="date"
           name="deadline"
           value={form.deadline}
           onChange={handleChange}
         />
 
-        <select name="priority" value={form.priority} onChange={handleChange}>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
+        <Select name="priority" value={form.priority} onChange={handleChange}>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </Select>
 
-        <input
+        <Input
           name="recruiterName"
           placeholder="Recruiter Name"
           value={form.recruiterName}
           onChange={handleChange}
         />
-
-        <input
+        <Input
           name="recruiterEmail"
           placeholder="Recruiter Email"
           value={form.recruiterEmail}
@@ -154,19 +157,47 @@ function JobForm({ refresh }) {
         value={form.notes}
         onChange={handleChange}
         style={{
-          marginTop: "16px",
+          marginTop: "20px",
           width: "100%",
+          padding: "14px",
+          borderRadius: "12px",
+          border: "1px solid #e5e7eb",
+          fontSize: "14px",
         }}
       />
 
       {/* BUTTON */}
-      <div style={{ marginTop: "20px" }}>
-        <button type="submit" disabled={loading}>
-          {loading ? "Adding..." : "Add Application"}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={loading}
+        style={{
+          marginTop: "28px",
+          padding: "14px 28px",
+          background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+          color: "#fff",
+          border: "none",
+          borderRadius: "14px",
+          fontSize: "15px",
+          fontWeight: 600,
+          cursor: "pointer",
+          boxShadow: "0 10px 25px rgba(37,99,235,0.4)",
+        }}
+      >
+        {loading ? "Adding..." : "Add Application"}
+      </button>
     </form>
   );
 }
+
+/* ---------- Reusable Inputs ---------- */
+const baseInputStyle = {
+  padding: "14px",
+  borderRadius: "12px",
+  border: "1px solid #e5e7eb",
+  fontSize: "14px",
+};
+
+const Input = (props) => <input {...props} style={baseInputStyle} />;
+const Select = (props) => <select {...props} style={baseInputStyle} />;
 
 export default JobForm;
