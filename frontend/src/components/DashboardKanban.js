@@ -1,4 +1,8 @@
-function DashboardKanban() {
+function DashboardKanban({ jobs = [] }) {
+  const wishlist = jobs.filter((j) => j.status === "Wishlist");
+  const applied = jobs.filter((j) => j.status === "Applied");
+  const interview = jobs.filter((j) => j.status === "Interview");
+
   return (
     <div
       style={{
@@ -8,17 +12,21 @@ function DashboardKanban() {
       }}
     >
       <KanbanColumn title="Wishlist" color="#64748b">
-        <KanbanCard company="Google" role="Frontend Engineer" />
-        <KanbanCard company="Amazon" role="SDE I" />
+        {wishlist.map((job) => (
+          <KanbanCard key={job._id} company={job.companyName} role={job.role} />
+        ))}
       </KanbanColumn>
 
       <KanbanColumn title="Applied" color="#3b82f6">
-        <KanbanCard company="Meta" role="React Developer" />
-        <KanbanCard company="Netflix" role="UI Engineer" />
+        {applied.map((job) => (
+          <KanbanCard key={job._id} company={job.companyName} role={job.role} />
+        ))}
       </KanbanColumn>
 
       <KanbanColumn title="Interview" color="#20c997">
-        <KanbanCard company="Microsoft" role="UI Developer" />
+        {interview.map((job) => (
+          <KanbanCard key={job._id} company={job.companyName} role={job.role} />
+        ))}
       </KanbanColumn>
     </div>
   );
@@ -34,7 +42,6 @@ function KanbanColumn({ title, color, children }) {
         boxShadow: "0 10px 30px rgba(2,6,23,0.05)",
       }}
     >
-      {/* COLUMN HEADER */}
       <div
         style={{
           display: "flex",
