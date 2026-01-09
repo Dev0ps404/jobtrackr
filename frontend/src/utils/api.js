@@ -4,7 +4,7 @@ const API = axios.create({
   // ✅ LOCAL + DEPLOY FRIENDLY
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://jobtrackr-hxk9.onrender.com//api" // 👈 apna backend URL
+      ? "https://jobtrackr-hxk9.onrender.com/api" // 👈 apna backend URL
       : "http://localhost:5000/api",
 });
 
