@@ -1,6 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // 🔐 REGISTER
 exports.registerUser = async (req, res) => {
@@ -18,6 +21,7 @@ exports.registerUser = async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    provider: "local",
   });
 
   res.status(201).json({
@@ -27,12 +31,12 @@ exports.registerUser = async (req, res) => {
   });
 };
 
-// 🔐 LOGIN
+// 🔐 LOGIN (EMAIL + PASSWORD)
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) {
+  if (!user || !user.password) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
@@ -41,11 +45,9 @@ exports.loginUser = async (req, res) => {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
   res.json({
     token,
@@ -55,4 +57,47 @@ exports.loginUser = async (req, res) => {
       email: user.email,
     },
   });
+};
+
+// 🔐 GOOGLE LOGIN (NEW)
+exports.googleLogin = async (req, res) => {
+  const { credential } = req.body;
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        photo: picture,
+        provider: "google",
+      });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        photo: user.photo,
+      },
+    });
+  } catch (error) {
+    console.error("GOOGLE LOGIN ERROR 👉", error);
+    res.status(401).json({ message: "Google authentication failed" });
+  }
 };
