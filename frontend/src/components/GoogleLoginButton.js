@@ -1,28 +1,47 @@
-import { useEffect } from "react";
-import api from "../utils/api";
+import { useEffect, useCallback } from "react";
 
 function GoogleLoginButton({ onSuccess }) {
+  // 🔥 stable callback so eslint warning goes away
+  const handleGoogleLogin = useCallback(
+    async (response) => {
+      try {
+        const res = await fetch(
+          "https://jobtrackr-hxk9.onrender.com/api/auth/google",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential: response.credential }),
+          }
+        );
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userName", data.user.name);
+        localStorage.setItem("userEmail", data.user.email);
+
+        if (onSuccess) onSuccess();
+      } catch (err) {
+        console.error("GOOGLE LOGIN ERROR 👉", err);
+        alert("Google login failed");
+      }
+    },
+    [onSuccess]
+  );
+
   useEffect(() => {
     const container = document.getElementById("google-login-btn");
     if (container) container.innerHTML = "";
 
-    if (!document.getElementById("google-gsi-script")) {
-      const script = document.createElement("script");
-      script.id = "google-gsi-script";
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.onload = initGoogle;
-      document.body.appendChild(script);
-    } else {
-      initGoogle();
-    }
+    const GOOGLE_CLIENT_ID =
+      "PASTE_YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
 
     function initGoogle() {
       if (!window.google) return;
 
       window.google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleLogin,
       });
 
@@ -35,26 +54,18 @@ function GoogleLoginButton({ onSuccess }) {
         }
       );
     }
-  }, []);
 
-  const handleGoogleLogin = async (response) => {
-    try {
-      const res = await api.post("/api/auth/google", {
-        credential: response.credential,
-      });
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userName", res.data.user.name);
-      localStorage.setItem("userEmail", res.data.user.email);
-      if (res.data.user.photo) {
-        localStorage.setItem("userPhoto", res.data.user.photo);
-      }
-
-      if (onSuccess) onSuccess();
-    } catch (err) {
-      alert("Google login failed");
+    if (!window.google) {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = initGoogle;
+      document.body.appendChild(script);
+    } else {
+      initGoogle();
     }
-  };
+  }, [handleGoogleLogin]);
 
   return (
     <div
