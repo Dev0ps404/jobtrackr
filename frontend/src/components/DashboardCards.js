@@ -6,7 +6,6 @@ function AnimatedNumber({ value }) {
   useEffect(() => {
     let start = 0;
     const end = Number(value);
-    const duration = 500;
     const step = Math.max(1, Math.floor(end / 20));
 
     const timer = setInterval(() => {
@@ -17,7 +16,7 @@ function AnimatedNumber({ value }) {
       } else {
         setCount(start);
       }
-    }, duration / 20);
+    }, 25);
 
     return () => clearInterval(timer);
   }, [value]);
@@ -33,118 +32,44 @@ function DashboardCards({ jobs = [] }) {
 
   return (
     <div style={grid}>
-      <Card
-        title="Applications"
-        value={total}
-        icon="📄"
-        sub="Total applied"
-        accent="#20c997"
-        bg="linear-gradient(135deg, #e6faf6, #ffffff)"
-      />
-      <Card
-        title="Interviews"
-        value={interviews}
-        icon="🎤"
-        sub="In progress"
-        accent="#3b82f6"
-        bg="linear-gradient(135deg, #eff6ff, #ffffff)"
-      />
-      <Card
-        title="Offers"
-        value={offers}
-        icon="🎉"
-        sub="Received"
-        accent="#f59e0b"
-        bg="linear-gradient(135deg, #fff7ed, #ffffff)"
-      />
-      <Card
-        title="Rejected"
-        value={rejected}
-        icon="❌"
-        sub="Keep trying"
-        accent="#ef4444"
-        bg="linear-gradient(135deg, #fef2f2, #ffffff)"
-      />
+      <Card title="Applications" value={total} icon="📄" accent="#20c997" />
+      <Card title="Interviews" value={interviews} icon="🎤" accent="#3b82f6" />
+      <Card title="Offers" value={offers} icon="🎉" accent="#f59e0b" />
+      <Card title="Rejected" value={rejected} icon="❌" accent="#ef4444" />
     </div>
   );
 }
 
-const Card = ({ title, value, icon, sub, accent, bg }) => (
-  <div
-    style={{
-      ...card,
-      background: bg,
-      borderTop: `4px solid ${accent}`,
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = "translateY(-8px)";
-      e.currentTarget.style.boxShadow = "0 30px 80px rgba(2,6,23,0.15)";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = "translateY(0)";
-      e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,6,23,0.08)";
-    }}
-  >
-    <div style={cardTop}>
-      <div
-        style={{
-          width: "42px",
-          height: "42px",
-          borderRadius: "12px",
-          background: accent,
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "20px",
-        }}
-      >
-        {icon}
-      </div>
-
-      <h4 style={{ margin: 0, color: "#475569", fontWeight: 600 }}>{title}</h4>
+const Card = ({ title, value, icon, accent }) => (
+  <div style={{ ...card, borderTop: `5px solid ${accent}` }}>
+    <div style={top}>
+      <span style={{ fontSize: "22px" }}>{icon}</span>
+      <h4>{title}</h4>
     </div>
-
-    <h2 style={cardValue}>
+    <h2>
       <AnimatedNumber value={value} />
     </h2>
-
-    <p style={cardSub}>{sub}</p>
   </div>
 );
-
-/* ===== STYLES ===== */
 
 const grid = {
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "24px",
+  marginBottom: "40px",
 };
 
 const card = {
-  padding: "28px",
-  borderRadius: "22px",
-  boxShadow: "0 20px 50px rgba(2,6,23,0.08)",
-  transition: "all 0.35s ease",
-  cursor: "pointer",
+  background: "#fff",
+  padding: "24px",
+  borderRadius: "18px",
+  boxShadow: "0 20px 50px rgba(0,0,0,0.08)",
 };
 
-const cardTop = {
+const top = {
   display: "flex",
   alignItems: "center",
-  gap: "12px",
-  marginBottom: "20px",
-};
-
-const cardValue = {
-  fontSize: "44px",
-  fontWeight: 800,
-  margin: "0 0 6px",
-};
-
-const cardSub = {
-  fontSize: "14px",
-  color: "#64748b",
+  gap: "10px",
 };
 
 export default DashboardCards;
