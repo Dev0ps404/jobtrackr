@@ -5,13 +5,12 @@ import DashboardTopbar from "../components/DashboardTopbar";
 
 function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true); // ✅ NEW
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* ✅ AUTH GUARD — ONLY FOR DASHBOARD ROUTES */
+  /* ✅ AUTH GUARD — FIXED */
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     const protectedRoutes = [
       "/dashboard",
       "/applications",
@@ -24,10 +23,17 @@ function DashboardLayout() {
       location.pathname.startsWith(route)
     );
 
+    const token = localStorage.getItem("token");
+
     if (isProtectedRoute && !token) {
       navigate("/login");
+    } else {
+      setCheckingAuth(false); // ✅ auth verified
     }
   }, [location.pathname, navigate]);
+
+  // ✅ IMPORTANT: wait until auth check finishes
+  if (checkingAuth) return null;
 
   return (
     <div
@@ -42,18 +48,16 @@ function DashboardLayout() {
         backgroundSize: "32px 32px",
       }}
     >
-      {/* SIDEBAR ALWAYS FIXED */}
       <DashboardSidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}
       />
 
-      {/* MAIN CONTENT */}
       <div style={{ flex: 1, position: "relative" }}>
         <DashboardTopbar />
 
         <div style={{ padding: "32px" }}>
-          <Outlet /> {/* 👈 YAHAN PAGE CHANGE HOGA */}
+          <Outlet />
         </div>
       </div>
     </div>
