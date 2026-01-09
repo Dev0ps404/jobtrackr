@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function AnimatedNumber({ value }) {
   const [count, setCount] = useState(0);
@@ -26,36 +25,41 @@ function AnimatedNumber({ value }) {
   return count;
 }
 
-function DashboardCards() {
+function DashboardCards({ jobs = [] }) {
+  const total = jobs.length;
+  const interviews = jobs.filter((j) => j.status === "Interview").length;
+  const offers = jobs.filter((j) => j.status === "Selected").length;
+  const rejected = jobs.filter((j) => j.status === "Rejected").length;
+
   return (
     <div style={grid}>
       <Card
         title="Applications"
-        value="24"
+        value={total}
         icon="📄"
-        sub="+3 this week"
+        sub="Total applied"
         accent="#20c997"
         bg="linear-gradient(135deg, #e6faf6, #ffffff)"
       />
       <Card
         title="Interviews"
-        value="6"
+        value={interviews}
         icon="🎤"
-        sub="2 upcoming"
+        sub="In progress"
         accent="#3b82f6"
         bg="linear-gradient(135deg, #eff6ff, #ffffff)"
       />
       <Card
         title="Offers"
-        value="2"
+        value={offers}
         icon="🎉"
-        sub="1 pending"
+        sub="Received"
         accent="#f59e0b"
         bg="linear-gradient(135deg, #fff7ed, #ffffff)"
       />
       <Card
         title="Rejected"
-        value="4"
+        value={rejected}
         icon="❌"
         sub="Keep trying"
         accent="#ef4444"
@@ -81,7 +85,6 @@ const Card = ({ title, value, icon, sub, accent, bg }) => (
       e.currentTarget.style.boxShadow = "0 20px 50px rgba(2,6,23,0.08)";
     }}
   >
-    {/* TOP */}
     <div style={cardTop}>
       <div
         style={{
@@ -102,12 +105,10 @@ const Card = ({ title, value, icon, sub, accent, bg }) => (
       <h4 style={{ margin: 0, color: "#475569", fontWeight: 600 }}>{title}</h4>
     </div>
 
-    {/* VALUE */}
     <h2 style={cardValue}>
       <AnimatedNumber value={value} />
     </h2>
 
-    {/* SUB TEXT */}
     <p style={cardSub}>{sub}</p>
   </div>
 );
