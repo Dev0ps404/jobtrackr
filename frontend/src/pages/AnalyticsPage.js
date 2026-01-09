@@ -118,7 +118,7 @@ function AnalyticsPage({ jobs = [] }) {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="value" fill="#2563eb" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="value" fill="#11ec3dff" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
