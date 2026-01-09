@@ -44,105 +44,171 @@ function JobForm({ refresh }) {
   };
 
   return (
-    <form
-      onSubmit={submitHandler}
-      style={{
-        background: "#ffffff",
-        padding: "24px",
-        borderRadius: "14px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-        marginBottom: "32px",
-      }}
-    >
-      <h2 style={{ marginBottom: "16px" }}>Add Application</h2>
+    <form onSubmit={submitHandler} style={card}>
+      <h2 style={title}>Add Application</h2>
 
       <div style={grid}>
-        <input
-          name="companyName"
-          placeholder="Company Name"
-          value={form.companyName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="role"
-          placeholder="Role"
-          value={form.role}
-          onChange={handleChange}
-          required
-        />
+        {/* Company */}
+        <Field label="Company Name">
+          <input
+            name="companyName"
+            placeholder="e.g. Google, Flipkart"
+            value={form.companyName}
+            onChange={handleChange}
+            required
+          />
+        </Field>
 
-        <select name="jobType" value={form.jobType} onChange={handleChange}>
-          <option>Full-time</option>
-          <option>Internship</option>
-          <option>Remote</option>
-        </select>
+        {/* Role */}
+        <Field label="Role / Position">
+          <input
+            name="role"
+            placeholder="e.g. Frontend Developer"
+            value={form.role}
+            onChange={handleChange}
+            required
+          />
+        </Field>
 
-        <input
-          name="location"
-          placeholder="Location"
-          value={form.location}
-          onChange={handleChange}
-        />
-        <input
-          name="salary"
-          placeholder="CTC / Stipend"
-          value={form.salary}
-          onChange={handleChange}
-        />
+        {/* Job Type */}
+        <Field label="Job Type">
+          <select name="jobType" value={form.jobType} onChange={handleChange}>
+            <option>Full-time</option>
+            <option>Internship</option>
+            <option>Remote</option>
+          </select>
+        </Field>
 
-        <select name="source" value={form.source} onChange={handleChange}>
-          <option>LinkedIn</option>
-          <option>Company Website</option>
-          <option>Referral</option>
-          <option>Other</option>
-        </select>
+        {/* Location */}
+        <Field label="Location">
+          <input
+            name="location"
+            placeholder="e.g. Bangalore / Remote"
+            value={form.location}
+            onChange={handleChange}
+          />
+        </Field>
 
-        <input
-          type="date"
-          name="deadline"
-          value={form.deadline}
-          onChange={handleChange}
-        />
+        {/* Salary */}
+        <Field label="CTC / Stipend">
+          <input
+            name="salary"
+            placeholder="e.g. 12 LPA / 30k per month"
+            value={form.salary}
+            onChange={handleChange}
+          />
+        </Field>
 
-        <select name="priority" value={form.priority} onChange={handleChange}>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
+        {/* Source */}
+        <Field label="Source">
+          <select name="source" value={form.source} onChange={handleChange}>
+            <option>LinkedIn</option>
+            <option>Company Website</option>
+            <option>Referral</option>
+            <option>Other</option>
+          </select>
+        </Field>
+
+        {/* Deadline */}
+        <Field label="Application / Deadline Date">
+          <input
+            type="date"
+            name="deadline"
+            value={form.deadline}
+            onChange={handleChange}
+          />
+        </Field>
+
+        {/* Priority */}
+        <Field label="Priority">
+          <select name="priority" value={form.priority} onChange={handleChange}>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </Field>
       </div>
 
-      <textarea
-        name="notes"
-        placeholder="Notes / Interview feedback"
-        value={form.notes}
-        onChange={handleChange}
-        rows={3}
-        style={{ width: "100%", marginTop: "12px" }}
-      />
+      {/* Notes */}
+      <div style={{ marginTop: "16px" }}>
+        <label style={label}>Notes / Interview Feedback</label>
+        <textarea
+          name="notes"
+          placeholder="HR call notes, interview experience, next steps..."
+          value={form.notes}
+          onChange={handleChange}
+          rows={4}
+          style={textarea}
+        />
+      </div>
 
-      <button
-        type="submit"
-        style={{
-          marginTop: "16px",
-          padding: "10px 22px",
-          background: "#2563eb",
-          color: "#fff",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
+      <button type="submit" style={button}>
         Add Application
       </button>
     </form>
   );
 }
 
+/* ---------- SMALL UI COMPONENT ---------- */
+const Field = ({ label, children }) => (
+  <div>
+    <label style={labelStyle}>{label}</label>
+    {children}
+  </div>
+);
+
+/* ---------- STYLES ---------- */
+
+const card = {
+  background: "#ffffff",
+  padding: "28px",
+  borderRadius: "18px",
+  boxShadow: "0 12px 40px rgba(2,6,23,0.08)",
+  marginBottom: "32px",
+};
+
+const title = {
+  marginBottom: "20px",
+  fontSize: "28px",
+};
+
 const grid = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-  gap: "12px",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gap: "16px",
+};
+
+const labelStyle = {
+  display: "block",
+  marginBottom: "6px",
+  fontSize: "14px",
+  fontWeight: 600,
+  color: "#334155",
+};
+
+const label = {
+  display: "block",
+  marginBottom: "6px",
+  fontWeight: 600,
+};
+
+const textarea = {
+  width: "100%",
+  padding: "10px",
+  borderRadius: "8px",
+  border: "1px solid #cbd5e1",
+  fontSize: "14px",
+};
+
+const button = {
+  marginTop: "22px",
+  padding: "12px 26px",
+  background: "#2563eb",
+  color: "#fff",
+  border: "none",
+  borderRadius: "10px",
+  cursor: "pointer",
+  fontSize: "15px",
 };
 
 export default JobForm;
