@@ -35,7 +35,7 @@ function GoogleLoginButton({ onSuccess }) {
     if (container) container.innerHTML = "";
 
     const GOOGLE_CLIENT_ID =
-      "530359530192-533q8batbbntl90dohl5d9adeo9qfeco.apps.googleusercontent.com";
+      "530359530192-7a15bjgklpsnjhpfoijoeo581lsp4t5c.apps.googleusercontent.com";
 
     function initGoogle() {
       if (!window.google) return;
