@@ -23,9 +23,12 @@ function Login() {
         password,
       });
 
+      // ✅ STEP 2 — YAHI KARNA HAI
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userEmail", res.data.user.email);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("userPhoto", res.data.user.photo || "");
       localStorage.setItem("userName", res.data.user.name);
+      localStorage.setItem("userEmail", res.data.user.email);
 
       navigate("/dashboard");
     } catch (err) {
