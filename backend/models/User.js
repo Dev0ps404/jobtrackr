@@ -12,8 +12,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     password: {
-      type: String,
-      required: false, // ✅ GOOGLE USERS
+      type: String, // google users ke liye empty rahega
     },
     photo: {
       type: String,
