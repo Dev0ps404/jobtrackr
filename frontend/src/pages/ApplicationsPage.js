@@ -1,48 +1,20 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import JobForm from "../components/JobForm";
 import JobList from "../components/JobList";
-import api from "../utils/api";
 
-function ApplicationsPage() {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // 🔄 Fetch all applications
-  const fetchJobs = async () => {
-    try {
-      const res = await api.get("/applications");
-      setJobs(res.data);
-    } catch (err) {
-      alert("Failed to load applications");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Initial load
-  useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  // Refresh callback (used by JobForm / JobList)
-  const refresh = () => {
-    fetchJobs();
-  };
-
-  if (loading) {
-    return <p>Loading applications...</p>;
-  }
-
+function ApplicationsPage({ jobs = [], refresh }) {
   return (
-    <>
-      <h1>All Applications</h1>
+    <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "24px" }}>
+      <h1 style={{ fontSize: "42px", marginBottom: "20px" }}>
+        All Applications
+      </h1>
 
-      {/* ADD JOB FORM */}
       <JobForm refresh={refresh} />
 
-      {/* JOB LIST */}
+      <h2 style={{ margin: "30px 0 16px" }}>Your Applications</h2>
+
       <JobList jobs={jobs} refresh={refresh} />
-    </>
+    </div>
   );
 }
 
