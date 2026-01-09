@@ -1,12 +1,12 @@
 function DashboardKanban({ jobs = [] }) {
-  const wishlist = jobs.filter((j) => j.status === "Wishlist");
+  const selected = jobs.filter((j) => j.status === "Selected");
   const applied = jobs.filter((j) => j.status === "Applied");
   const interview = jobs.filter((j) => j.status === "Interview");
 
   return (
     <div style={grid}>
-      <Column title="Wishlist" color="#64748b">
-        {wishlist.map((j) => (
+      <Column title="Selected" color="#22c55e">
+        {selected.map((j) => (
           <Card key={j._id} job={j} />
         ))}
       </Column>

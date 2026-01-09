@@ -24,17 +24,17 @@ function AnimatedNumber({ value }) {
   return count;
 }
 
-function DashboardCards({ jobs = [] }) {
+function DashboardCards({ jobs = [], loading }) {
   const total = jobs.length;
   const interviews = jobs.filter((j) => j.status === "Interview").length;
-  const offers = jobs.filter((j) => j.status === "Selected").length;
+  const selected = jobs.filter((j) => j.status === "Selected").length;
   const rejected = jobs.filter((j) => j.status === "Rejected").length;
 
   return (
     <div style={grid}>
       <Card title="Applications" value={total} icon="📄" accent="#20c997" />
       <Card title="Interviews" value={interviews} icon="🎤" accent="#3b82f6" />
-      <Card title="Offers" value={offers} icon="🎉" accent="#f59e0b" />
+      <Card title="Selected" value={selected} icon="🎉" accent="#f59e0b" />
       <Card title="Rejected" value={rejected} icon="❌" accent="#ef4444" />
     </div>
   );

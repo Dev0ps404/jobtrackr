@@ -71,7 +71,7 @@ function AnalyticsPage({ jobs = [] }) {
           color="#f59e0b"
         />
         <StatCard
-          title="Offers"
+          title="Selected"
           value={statusMap.Selected || 0}
           color="#16a34a"
         />

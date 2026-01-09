@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "./utils/api";
 
 /* Pages */
@@ -17,19 +17,24 @@ import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const fetchJobs = async () => {
+  // 🔹 SINGLE SOURCE OF TRUTH
+  const fetchJobs = useCallback(async () => {
     try {
+      setLoading(true);
       const res = await api.get("/applications");
-      setJobs(res.data);
+      setJobs(res.data || []);
     } catch (err) {
-      console.error("Failed to fetch applications");
+      console.error("Failed to fetch applications", err);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [fetchJobs]);
 
   return (
     <Routes>
@@ -40,13 +45,24 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* DASHBOARD */}
+      {/* DASHBOARD LAYOUT */}
       <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<Dashboard jobs={jobs} />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Dashboard jobs={jobs} refresh={fetchJobs} loading={loading} />
+          }
+        />
 
         <Route
           path="/applications"
-          element={<ApplicationsPage jobs={jobs} refresh={fetchJobs} />}
+          element={
+            <ApplicationsPage
+              jobs={jobs}
+              refresh={fetchJobs}
+              loading={loading}
+            />
+          }
         />
 
         <Route path="/analytics" element={<AnalyticsPage jobs={jobs} />} />
