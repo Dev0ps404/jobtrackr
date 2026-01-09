@@ -28,13 +28,14 @@ function JobList({ jobs, refresh }) {
   };
 
   const deleteJob = async (id) => {
+    if (!window.confirm("Delete this application?")) return;
     await API.delete(`/applications/${id}`);
     refresh();
   };
 
   return (
     <div>
-      <h2>Your Applications</h2>
+      <h2 style={{ marginBottom: "16px" }}>Your Applications</h2>
 
       {jobs.length === 0 && <p>No applications found.</p>}
 
@@ -43,61 +44,96 @@ function JobList({ jobs, refresh }) {
           key={job._id}
           style={{
             background: "#ffffff",
-            borderRadius: "8px",
-            padding: "15px",
-            marginBottom: "12px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            borderRadius: "14px",
+            padding: "18px",
+            marginBottom: "16px",
+            boxShadow: "0 8px 24px rgba(2,6,23,0.08)",
             ...getDeadlineStyle(job.deadline),
           }}
         >
-          <h3>{job.companyName}</h3>
-          <p>{job.role}</p>
-
-          <p>
-            <strong>Status:</strong> {job.status}
-          </p>
-
-          {job.priority && (
-            <p>
-              <strong>Priority:</strong>{" "}
-              <span style={getPriorityStyle(job.priority)}>{job.priority}</span>
-            </p>
-          )}
-
-          {job.deadline && (
-            <p>
-              <strong>Deadline:</strong>{" "}
-              {new Date(job.deadline).toLocaleDateString()}
-            </p>
-          )}
-
-          <select
-            value={job.status}
-            onChange={(e) => updateStatus(job._id, e.target.value)}
-            style={{ padding: "6px", marginTop: "5px" }}
-          >
-            <option>Applied</option>
-            <option>Interview</option>
-            <option>Selected</option>
-            <option>Rejected</option>
-          </select>
-
-          <br />
-
-          <button
-            onClick={() => deleteJob(job._id)}
+          {/* HEADER */}
+          <div
             style={{
-              marginTop: "10px",
-              background: "#d32f2f",
-              color: "white",
-              border: "none",
-              padding: "6px 12px",
-              borderRadius: "4px",
-              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "6px",
             }}
           >
-            Delete
-          </button>
+            <h3 style={{ margin: 0 }}>{job.companyName}</h3>
+            <span style={{ fontSize: "14px", color: "#64748b" }}>
+              {job.status}
+            </span>
+          </div>
+
+          <p style={{ margin: "4px 0", color: "#475569" }}>{job.role}</p>
+
+          {/* META */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "16px",
+              fontSize: "14px",
+              marginTop: "8px",
+              color: "#475569",
+            }}
+          >
+            {job.priority && (
+              <span>
+                <strong>Priority:</strong>{" "}
+                <span style={getPriorityStyle(job.priority)}>
+                  {job.priority}
+                </span>
+              </span>
+            )}
+
+            {job.deadline && (
+              <span>
+                <strong>Deadline:</strong>{" "}
+                {new Date(job.deadline).toLocaleDateString()}
+              </span>
+            )}
+          </div>
+
+          {/* ACTIONS */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "14px",
+            }}
+          >
+            <select
+              value={job.status}
+              onChange={(e) => updateStatus(job._id, e.target.value)}
+              style={{
+                padding: "6px 10px",
+                borderRadius: "6px",
+              }}
+            >
+              <option>Applied</option>
+              <option>Interview</option>
+              <option>Selected</option>
+              <option>Rejected</option>
+            </select>
+
+            <button
+              onClick={() => deleteJob(job._id)}
+              style={{
+                background: "#fee2e2",
+                color: "#b91c1c",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontWeight: 500,
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>
