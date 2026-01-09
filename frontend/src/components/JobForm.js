@@ -48,14 +48,16 @@ function JobForm({ refresh }) {
       <h2 style={title}>Add Application</h2>
 
       {/* CARD 1 */}
-      <Card title="Job Details">
-        <Grid>
+      <div style={card}>
+        <h4 style={cardTitle}>Job Details</h4>
+        <div style={grid}>
           <Field label="Company Name">
             <input
               name="companyName"
-              placeholder="e.g. Google"
               value={form.companyName}
               onChange={handleChange}
+              placeholder="e.g. Google"
+              style={input}
               required
             />
           </Field>
@@ -63,15 +65,21 @@ function JobForm({ refresh }) {
           <Field label="Role / Position">
             <input
               name="role"
-              placeholder="e.g. Frontend Developer"
               value={form.role}
               onChange={handleChange}
+              placeholder="e.g. Frontend Developer"
+              style={input}
               required
             />
           </Field>
 
           <Field label="Job Type">
-            <select name="jobType" value={form.jobType} onChange={handleChange}>
+            <select
+              name="jobType"
+              value={form.jobType}
+              onChange={handleChange}
+              style={input}
+            >
               <option>Full-time</option>
               <option>Internship</option>
               <option>Remote</option>
@@ -81,28 +89,36 @@ function JobForm({ refresh }) {
           <Field label="Location">
             <input
               name="location"
-              placeholder="Bangalore / Remote"
               value={form.location}
               onChange={handleChange}
+              placeholder="Bangalore / Remote"
+              style={input}
             />
           </Field>
-        </Grid>
-      </Card>
+        </div>
+      </div>
 
       {/* CARD 2 */}
-      <Card title="Compensation & Source">
-        <Grid>
+      <div style={card}>
+        <h4 style={cardTitle}>Compensation & Source</h4>
+        <div style={grid}>
           <Field label="CTC / Stipend">
             <input
               name="salary"
-              placeholder="12 LPA / 30k pm"
               value={form.salary}
               onChange={handleChange}
+              placeholder="12 LPA / 30k pm"
+              style={input}
             />
           </Field>
 
           <Field label="Source">
-            <select name="source" value={form.source} onChange={handleChange}>
+            <select
+              name="source"
+              value={form.source}
+              onChange={handleChange}
+              style={input}
+            >
               <option>LinkedIn</option>
               <option>Company Website</option>
               <option>Referral</option>
@@ -116,6 +132,7 @@ function JobForm({ refresh }) {
               name="deadline"
               value={form.deadline}
               onChange={handleChange}
+              style={input}
             />
           </Field>
 
@@ -124,26 +141,28 @@ function JobForm({ refresh }) {
               name="priority"
               value={form.priority}
               onChange={handleChange}
+              style={input}
             >
               <option>High</option>
               <option>Medium</option>
               <option>Low</option>
             </select>
           </Field>
-        </Grid>
-      </Card>
+        </div>
+      </div>
 
       {/* CARD 3 */}
-      <Card title="Notes">
+      <div style={card}>
+        <h4 style={cardTitle}>Notes</h4>
         <textarea
           name="notes"
-          placeholder="Interview feedback, HR call notes, next steps..."
           value={form.notes}
           onChange={handleChange}
+          placeholder="Interview feedback, HR call notes..."
           rows={4}
           style={textarea}
         />
-      </Card>
+      </div>
 
       <button type="submit" style={button}>
         Add Application
@@ -152,25 +171,15 @@ function JobForm({ refresh }) {
   );
 }
 
-/* ---------- SMALL UI PARTS ---------- */
-
-const Card = ({ title, children }) => (
-  <div style={card}>
-    <h4 style={cardTitle}>{title}</h4>
-    {children}
-  </div>
-);
-
+/* ---------- SMALL COMPONENT ---------- */
 const Field = ({ label, children }) => (
   <div>
-    <label style={label}>{label}</label>
+    <label style={labelStyle}>{label}</label>
     {children}
   </div>
 );
 
-const Grid = ({ children }) => <div style={grid}>{children}</div>;
-
-/* ---------- STYLES ---------- */
+/* ---------- STYLES (ALL OBJECTS – NO ERROR) ---------- */
 
 const container = {
   maxWidth: "1000px",
@@ -201,11 +210,19 @@ const grid = {
   gap: "16px",
 };
 
-const label = {
-  display: "block",
+const labelStyle = {
   marginBottom: "6px",
   fontSize: "14px",
   fontWeight: 600,
+  display: "block",
+};
+
+const input = {
+  width: "100%",
+  padding: "10px",
+  borderRadius: "8px",
+  border: "1px solid #cbd5e1",
+  fontSize: "14px",
 };
 
 const textarea = {
@@ -213,6 +230,7 @@ const textarea = {
   padding: "12px",
   borderRadius: "10px",
   border: "1px solid #cbd5e1",
+  fontSize: "14px",
 };
 
 const button = {
