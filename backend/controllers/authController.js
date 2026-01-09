@@ -3,15 +3,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 
-/* 🔥 TEMP HARDCODE GOOGLE CLIENT ID (DEBUG) */
-const GOOGLE_CLIENT_ID =
-  "PASTE_YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com";
+// ❌ YAHAN client create MAT karo (Render issue)
+// const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
-
-/* =========================
-   🔐 REGISTER
-========================= */
+// =====================
+// 🔐 REGISTER
+// =====================
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -40,9 +37,9 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-/* =========================
-   🔐 LOGIN
-========================= */
+// =====================
+// 🔐 LOGIN
+// =====================
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -57,11 +54,9 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET || "debugsecret",
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       token,
@@ -76,21 +71,25 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-/* =========================
-   🔐 GOOGLE LOGIN (FINAL DEBUG)
-========================= */
+// =====================
+// 🔐 GOOGLE LOGIN (FIXED & SAFE)
+// =====================
 exports.googleLogin = async (req, res) => {
   try {
-    console.log("GOOGLE LOGIN HIT ✅");
-
     const { credential } = req.body;
+
     if (!credential) {
       return res.status(400).json({ message: "Missing credential" });
     }
 
+    // ✅ CLIENT YAHAN BANAO (REQUEST TIME)
+    const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    console.log("GOOGLE_CLIENT_ID (backend) 👉", process.env.GOOGLE_CLIENT_ID);
+
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
-      audience: GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -107,11 +106,9 @@ exports.googleLogin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET || "debugsecret",
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       token,
@@ -123,7 +120,9 @@ exports.googleLogin = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("GOOGLE VERIFY ERROR 👉", err);
-    res.status(401).json({ message: "Google login failed" });
+    console.error("❌ GOOGLE LOGIN ERROR:", err.message);
+    res.status(401).json({
+      message: "Google login failed",
+    });
   }
 };
