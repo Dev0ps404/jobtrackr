@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Features() {
+  const [isMobile, setIsMobile] = useState(false);
+
   const data = [
     [
       "🧠",
@@ -35,6 +37,18 @@ function Features() {
   ];
 
   /* =======================
+     MOBILE DETECTION
+  ======================= */
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* =======================
      SCROLL REPEAT ANIMATION
   ======================= */
   useEffect(() => {
@@ -60,7 +74,13 @@ function Features() {
     <section id="features" className="features-section observe-features">
       <div className="container">
         {/* ===== SECTION HEADER ===== */}
-        <div style={{ textAlign: "center", marginBottom: "72px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: isMobile ? "48px" : "72px",
+            padding: isMobile ? "0 12px" : undefined,
+          }}
+        >
           <span
             style={{
               color: "var(--primary)",
@@ -75,7 +95,7 @@ function Features() {
           <h2
             style={{
               marginTop: "16px",
-              fontSize: "42px",
+              fontSize: isMobile ? "28px" : "42px",
               fontWeight: 700,
               lineHeight: "1.2",
             }}
@@ -88,7 +108,7 @@ function Features() {
               marginTop: "20px",
               maxWidth: "640px",
               marginInline: "auto",
-              fontSize: "18px",
+              fontSize: isMobile ? "16px" : "18px",
               lineHeight: "1.6",
               color: "var(--text-muted)",
             }}
@@ -102,8 +122,9 @@ function Features() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             gap: "32px",
+            width: "100%",
           }}
         >
           {data.map(([icon, title, desc]) => (

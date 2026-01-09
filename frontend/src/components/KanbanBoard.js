@@ -2,8 +2,16 @@ const columns = ["Applied", "Interview", "Offer", "Rejected"];
 
 export default function KanbanBoard() {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20, marginTop: 40 }}>
-      {columns.map(col => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+        gap: 20,
+        marginTop: 40,
+        width: "100%",
+      }}
+    >
+      {columns.map((col) => (
         <div
           key={col}
           style={{
@@ -13,7 +21,15 @@ export default function KanbanBoard() {
           }}
         >
           <h3>{col}</h3>
-          <div style={{ marginTop: 10, padding: 10, background: "var(--bg-main)", borderRadius: 10 }}>
+
+          <div
+            style={{
+              marginTop: 10,
+              padding: 10,
+              background: "var(--bg-main)",
+              borderRadius: 10,
+            }}
+          >
             Frontend Developer
           </div>
         </div>

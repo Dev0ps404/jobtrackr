@@ -4,8 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 function GetStarted() {
   const [email, setEmail] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
 
+  /* ===== MOBILE DETECTION ===== */
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* ===== SCROLL ANIMATION (UNCHANGED) ===== */
   useEffect(() => {
     const section = document.querySelector(".observe-getstarted");
     if (!section) return;
@@ -30,26 +42,38 @@ function GetStarted() {
       className="observe-getstarted"
       style={{
         background: "var(--bg-main)",
-        padding: "140px 0",
+        padding: isMobile ? "80px 0" : "140px 0",
       }}
     >
       <div
         className="container"
         style={{
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr",
-          gap: "80px",
+          gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr",
+          gap: isMobile ? "48px" : "80px",
           alignItems: "center",
+          padding: isMobile ? "0 16px" : undefined,
         }}
       >
         {/* LEFT CONTENT */}
         <div className="getstarted-left">
-          <h2 style={{ fontSize: "48px", marginBottom: "36px" }}>
+          <h2
+            style={{
+              fontSize: isMobile ? "32px" : "48px",
+              marginBottom: "36px",
+              textAlign: isMobile ? "center" : "left",
+            }}
+          >
             Get Started
           </h2>
 
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "28px" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "28px",
+              textAlign: isMobile ? "center" : "left",
+            }}
           >
             <div>
               <h3>1. Sign Up</h3>
@@ -72,8 +96,9 @@ function GetStarted() {
           style={{
             background: "#ffffff",
             borderRadius: "20px",
-            padding: "48px",
+            padding: isMobile ? "32px 24px" : "48px",
             boxShadow: "0 30px 80px rgba(2,6,23,0.15)",
+            width: "100%",
           }}
         >
           <h3
@@ -93,7 +118,10 @@ function GetStarted() {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{ marginBottom: "20px" }}
+            style={{
+              marginBottom: "20px",
+              width: "100%",
+            }}
           />
 
           {/* REGISTER */}
@@ -105,8 +133,6 @@ function GetStarted() {
                 alert("Please enter email");
                 return;
               }
-
-              // ✅ FAKE REGISTER SUCCESS
               navigate("/dashboard");
             }}
           >
@@ -125,7 +151,7 @@ function GetStarted() {
             or
           </div>
 
-          {/* ✅ OFFICIAL GOOGLE BUTTON */}
+          {/* GOOGLE LOGIN */}
           <GoogleLoginButton onSuccess={() => navigate("/dashboard")} />
 
           {/* LOGIN LINK */}

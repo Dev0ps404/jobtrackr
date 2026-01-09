@@ -1,8 +1,20 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function PublicNavbar() {
-  // ✅ SHADOW ON SCROLL
+  const [isMobile, setIsMobile] = useState(false);
+
+  // ✅ detect mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ✅ SHADOW ON SCROLL (unchanged)
   useEffect(() => {
     const handleScroll = () => {
       const nav = document.querySelector(".navbar");
@@ -28,6 +40,8 @@ function PublicNavbar() {
         zIndex: 100,
         background: "#ffffff",
         borderBottom: "1px solid #e5e7eb",
+        maxWidth: "100%",
+        overflowX: "hidden",
       }}
     >
       <div
@@ -37,6 +51,8 @@ function PublicNavbar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          padding: isMobile ? "0 16px" : undefined,
+          maxWidth: "100%",
         }}
       >
         {/* LOGO */}
@@ -64,28 +80,30 @@ function PublicNavbar() {
         </Link>
 
         {/* LINKS */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "28px",
-            fontSize: "15px",
-          }}
-        >
-          <a href="#features" className="nav-link">
-            Features
-          </a>
-          <a href="#about" className="nav-link">
-            About
-          </a>
-          <Link to="/login" className="nav-link">
-            Login
-          </Link>
+        {!isMobile && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "28px",
+              fontSize: "15px",
+            }}
+          >
+            <a href="#features" className="nav-link">
+              Features
+            </a>
+            <a href="#about" className="nav-link">
+              About
+            </a>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
 
-          <Link to="/login">
-            <button className="btn-primary">Get Started</button>
-          </Link>
-        </div>
+            <Link to="/login">
+              <button className="btn-primary">Get Started</button>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );

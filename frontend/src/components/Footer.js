@@ -1,6 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Footer() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* ===== MOBILE DETECTION ===== */
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* ===== ANIMATION (UNCHANGED) ===== */
   useEffect(() => {
     const footer = document.querySelector(".footer-inner");
     if (!footer) return;
@@ -24,22 +37,31 @@ function Footer() {
       style={{
         background: "#f1f5f9",
         borderTop: "1px solid var(--border-soft)",
-        marginTop: "120px",
+        marginTop: isMobile ? "80px" : "120px",
       }}
     >
-      <div className="container footer-inner">
+      <div
+        className="container footer-inner"
+        style={{ padding: isMobile ? "0 16px" : undefined }}
+      >
         {/* ===== PHASE 1: BRAND ===== */}
         <div className="footer-phase footer-phase-1">
           <div
             style={{
-              padding: "60px 0 40px",
+              padding: isMobile ? "40px 0 32px" : "60px 0 40px",
               borderBottom: "1px solid var(--border-soft)",
+              textAlign: isMobile ? "center" : "left",
             }}
           >
             <h3 style={{ fontSize: "22px", marginBottom: "12px" }}>
               JobTrackr
             </h3>
-            <p style={{ maxWidth: "420px" }}>
+            <p
+              style={{
+                maxWidth: "420px",
+                margin: isMobile ? "0 auto" : undefined,
+              }}
+            >
               An AI‑powered platform to manage, track and optimize your job
               applications professionally.
             </p>
@@ -51,10 +73,11 @@ function Footer() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "40px",
-              padding: "48px 0",
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+              gap: isMobile ? "32px" : "40px",
+              padding: isMobile ? "40px 0" : "48px 0",
               borderBottom: "1px solid var(--border-soft)",
+              textAlign: isMobile ? "center" : "left",
             }}
           >
             {/* Company */}
@@ -105,12 +128,12 @@ function Footer() {
               </ul>
             </div>
 
-            {/* FOLLOW US — CENTERED FULL ROW */}
+            {/* FOLLOW US */}
             <div
               style={{
                 gridColumn: "1 / -1",
                 textAlign: "center",
-                marginTop: "32px",
+                marginTop: "24px",
               }}
             >
               <h4 style={{ ...headingStyle, textAlign: "center" }}>
@@ -125,36 +148,20 @@ function Footer() {
                   marginTop: "16px",
                 }}
               >
-                <a
-                  href="https://github.com/"
-                  aria-label="GitHub"
-                  className="footer-social"
-                >
+                <a href="https://github.com/" className="footer-social">
                   <GitHubIcon />
                 </a>
-                <a
-                  href="https://linkedin.com/"
-                  aria-label="LinkedIn"
-                  className="footer-social"
-                >
+                <a href="https://linkedin.com/" className="footer-social">
                   <LinkedInIcon />
                 </a>
-                <a
-                  href="https://twitter.com/"
-                  aria-label="Twitter"
-                  className="footer-social"
-                >
+                <a href="https://twitter.com/" className="footer-social">
                   <TwitterIcon />
                 </a>
-                <a
-                  href="https://instagram.com/"
-                  aria-label="Instagram"
-                  className="footer-social"
-                >
+                <a href="https://instagram.com/" className="footer-social">
                   <svg viewBox="0 0 24 24" width="18" height="18">
                     <path
                       fill="currentColor"
-                      d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"
+                      d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10z"
                     />
                   </svg>
                 </a>
@@ -195,6 +202,7 @@ const listStyle = {
   display: "flex",
   flexDirection: "column",
   gap: "10px",
+  alignItems: "center",
 };
 
 const iconStyle = {
@@ -203,7 +211,7 @@ const iconStyle = {
   fill: "currentColor",
 };
 
-/* ===== ICONS ===== */
+/* ===== ICONS (UNCHANGED) ===== */
 
 const GitHubIcon = () => (
   <svg viewBox="0 0 24 24" style={iconStyle}>

@@ -36,10 +36,10 @@ function LandingPage() {
           <div
             style={{
               position: "absolute",
-              right: "-160px",
-              top: "-180px",
-              width: "640px",
-              height: "640px",
+              right: "-120px", // ⬅️ less aggressive
+              top: "-140px",
+              width: "560px", // ⬅️ cleaner proportion
+              height: "560px",
               background: "linear-gradient(135deg, #20c997, #14b8a6)",
               borderRadius: "50%",
               zIndex: 0,
@@ -101,8 +101,8 @@ function LandingPage() {
           <div
             className="hero-image-wrapper"
             style={{
-              transform: isMobile ? "none" : "translateX(-95px)",
-              maxWidth: "460px",
+              transform: "translateX(-40px)", // ⬅️ desktop balanced
+              maxWidth: "520px", // ⬅️ thoda wide for desktop
               width: "100%",
             }}
           >
@@ -113,6 +113,7 @@ function LandingPage() {
                 borderRadius: "24px",
                 padding: "20px",
                 boxShadow: "0 40px 120px rgba(0,0,0,0.35)",
+                transform: "translateY(10px)",
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: "12px" }}>
