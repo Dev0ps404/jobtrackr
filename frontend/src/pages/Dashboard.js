@@ -1,12 +1,13 @@
 import DashboardCards from "../components/DashboardCards";
 import DashboardKanban from "../components/DashboardKanban";
 
-function Dashboard() {
+function Dashboard({ jobs = [] }) {
   return (
     <>
-      <DashboardCards />
+      <DashboardCards jobs={jobs} />
+
       <div style={{ marginTop: "32px" }}>
-        <DashboardKanban />
+        <DashboardKanban jobs={jobs} />
       </div>
     </>
   );
