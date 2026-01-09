@@ -2,11 +2,22 @@ import PublicNavbar from "../components/PublicNavbar";
 import Features from "../components/Features";
 import GetStarted from "../components/GetStarted";
 import Footer from "../components/Footer";
-import HeroKanban from "../components/HeroKanban";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // ✅ responsive detector
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -15,41 +26,60 @@ function LandingPage() {
       {/* ================= HERO SECTION ================= */}
       <section
         className="hero-section"
-        style={{ position: "relative", overflow: "hidden" }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+        }}
       >
-        {/* GREEN CURVE */}
-        <div
-          style={{
-            position: "absolute",
-            right: "-160px",
-            top: "-180px",
-            width: "640px",
-            height: "640px",
-            background: "linear-gradient(135deg, #20c997, #14b8a6)",
-            borderRadius: "50%",
-            zIndex: 0,
-          }}
-        />
+        {/* GREEN CURVE (hide on mobile) */}
+        {!isMobile && (
+          <div
+            style={{
+              position: "absolute",
+              right: "-160px",
+              top: "-180px",
+              width: "640px",
+              height: "640px",
+              background: "linear-gradient(135deg, #20c997, #14b8a6)",
+              borderRadius: "50%",
+              zIndex: 0,
+            }}
+          />
+        )}
 
         <div
           className="container hero-container"
           style={{
             display: "flex",
+            flexDirection: isMobile ? "column" : "row",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "40px",
-            padding: "120px 0",
+            gap: isMobile ? "32px" : "40px",
+            padding: isMobile ? "80px 16px" : "120px 0",
             position: "relative",
             zIndex: 1,
+            textAlign: isMobile ? "center" : "left",
           }}
         >
           {/* LEFT CONTENT */}
           <div style={{ maxWidth: "560px" }}>
-            <h1 style={{ marginBottom: "20px" }}>
+            <h1
+              style={{
+                marginBottom: "20px",
+                fontSize: isMobile ? "32px" : "48px",
+                lineHeight: 1.2,
+              }}
+            >
               Your AI Companion <br /> for Job Applications
             </h1>
 
-            <p style={{ marginBottom: "32px" }}>
+            <p
+              style={{
+                marginBottom: "32px",
+                fontSize: isMobile ? "16px" : "18px",
+                color: "#475569",
+              }}
+            >
               In the competitive job market, staying organized and presenting
               yourself effectively is crucial. JobTrackr simplifies your job
               search with a smart AI‑powered platform.
@@ -58,6 +88,10 @@ function LandingPage() {
             <button
               className="btn-primary hero-btn"
               onClick={() => navigate("/login")}
+              style={{
+                width: isMobile ? "100%" : "auto",
+                padding: "14px 28px",
+              }}
             >
               START YOUR JOURNEY
             </button>
@@ -67,7 +101,7 @@ function LandingPage() {
           <div
             className="hero-image-wrapper"
             style={{
-              transform: "translateX(-95px)",
+              transform: isMobile ? "none" : "translateX(-95px)",
               maxWidth: "460px",
               width: "100%",
             }}
@@ -85,7 +119,15 @@ function LandingPage() {
                 My job search
               </div>
 
-              <div className="kanban">
+              <div
+                className="kanban"
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  overflowX: isMobile ? "auto" : "visible",
+                }}
+              >
+                {/* COLUMN */}
                 <div className="kanban-col">
                   <div className="kanban-title">Wishlist</div>
                   <div className="kanban-card">

@@ -61,7 +61,8 @@ const Card = ({ job }) => (
 
 const grid = {
   display: "grid",
-  gridTemplateColumns: "repeat(3, 1fr)",
+  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+
   gap: "24px",
 };
 

@@ -112,7 +112,7 @@ function AnalyticsPage({ jobs = [] }) {
 
         {/* PRIORITY BAR */}
         <Card title="Priority Distribution">
-          <ResponsiveContainer width="50%" height={280}>
+          <ResponsiveContainer width="100%" height={280}>
             <BarChart data={priorityData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />

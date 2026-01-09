@@ -77,7 +77,7 @@ const Card = ({ title, value, icon, accent }) => (
 
 const grid = {
   display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
   gap: "24px",
   marginBottom: "40px",
 };
