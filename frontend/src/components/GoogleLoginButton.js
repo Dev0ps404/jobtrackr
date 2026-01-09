@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import api from "../utils/api";
 
 function GoogleLoginButton({ onSuccess }) {
   useEffect(() => {
@@ -21,8 +22,7 @@ function GoogleLoginButton({ onSuccess }) {
       if (!window.google) return;
 
       window.google.accounts.id.initialize({
-        client_id:
-          "530359530192-tcpi2ueqlfv1vecvtikd0cv4acst0fvs.apps.googleusercontent.com",
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: handleGoogleLogin,
       });
 
@@ -37,18 +37,23 @@ function GoogleLoginButton({ onSuccess }) {
     }
   }, []);
 
-  const handleGoogleLogin = (response) => {
-    // Decode JWT
-    const base64Url = response.credential.split(".")[1];
-    const decoded = JSON.parse(atob(base64Url));
+  const handleGoogleLogin = async (response) => {
+    try {
+      const res = await api.post("/api/auth/google", {
+        credential: response.credential,
+      });
 
-    // SAVE USER INFO
-    localStorage.setItem("isAuth", "true");
-    localStorage.setItem("userName", decoded.name);
-    localStorage.setItem("userEmail", decoded.email);
-    localStorage.setItem("userPhoto", decoded.picture); // 🔥 PHOTO
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userName", res.data.user.name);
+      localStorage.setItem("userEmail", res.data.user.email);
+      if (res.data.user.photo) {
+        localStorage.setItem("userPhoto", res.data.user.photo);
+      }
 
-    if (onSuccess) onSuccess();
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      alert("Google login failed");
+    }
   };
 
   return (
