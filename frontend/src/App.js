@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "./utils/api";
 
 /* Pages */
 import LandingPage from "./pages/LandingPage";
@@ -14,25 +16,45 @@ import ApplicationsPage from "./pages/ApplicationsPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
+  const [jobs, setJobs] = useState([]);
+
+  const fetchJobs = async () => {
+    try {
+      const res = await api.get("/applications");
+      setJobs(res.data);
+    } catch (err) {
+      console.error("Failed to fetch applications");
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
   return (
     <Routes>
-      {/* 🌟 LANDING PAGE */}
+      {/* LANDING */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* 🔐 AUTH */}
+      {/* AUTH */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* 🧱 APP PAGES WITH SIDEBAR */}
+      {/* DASHBOARD */}
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/applications" element={<ApplicationsPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
+
+        <Route
+          path="/applications"
+          element={<ApplicationsPage jobs={jobs} refresh={fetchJobs} />}
+        />
+
+        <Route path="/analytics" element={<AnalyticsPage jobs={jobs} />} />
+
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
 
-      {/* ❌ FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
