@@ -1,26 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import api from "../utils/api"; // ✅ ADDED
+import api from "../utils/api";
 
 function Login() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // ✅ ADDED
   const navigate = useNavigate();
 
-  // EMAIL LOGIN
+  // EMAIL + PASSWORD LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email) {
-      alert("Please enter email");
+    if (!email || !password) {
+      alert("Please enter email and password");
       return;
     }
 
     try {
-      // ✅ BACKEND LOGIN CALL (ADDED)
-      const res = await api.post("/api/auth/login", { email });
+      const res = await api.post("/api/auth/login", {
+        email,
+        password,
+      });
 
-      // ✅ SAVE USER INFO (SAME IDEA, MORE COMPLETE)
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userEmail", res.data.user.email);
       localStorage.setItem("userName", res.data.user.name);
@@ -54,13 +56,21 @@ function Login() {
           Login to JobTrackr
         </h2>
 
-        {/* EMAIL LOGIN */}
         <form onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{ marginBottom: "12px" }}
+          />
+
+          {/* ✅ PASSWORD FIELD ADDED (NO CSS CHANGE) */}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             style={{ marginBottom: "16px" }}
           />
 
@@ -84,7 +94,7 @@ function Login() {
           or
         </div>
 
-        {/* GOOGLE LOGIN */}
+        {/* GOOGLE LOGIN (NEXT STEP ME BACKEND CONNECT HOGA) */}
         <GoogleLoginButton onSuccess={() => navigate("/dashboard")} />
 
         <p
