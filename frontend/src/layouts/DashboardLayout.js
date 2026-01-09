@@ -1,25 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DashboardSidebar from "../components/DashboardSidebar";
+import DashboardTopbar from "../components/DashboardTopbar";
 
 function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
-
-  // ✅ STEP 6 — MOBILE DETECTION
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setCollapsed(true); // mobile → sidebar collapsed
-      } else {
-        setCollapsed(false); // desktop → sidebar open
-      }
-    };
-
-    handleResize(); // run once on load
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div
@@ -35,16 +20,29 @@ function DashboardLayout() {
         onToggle={() => setCollapsed(!collapsed)}
       />
 
-      {/* MAIN CONTENT */}
-      <main
+      {/* RIGHT SIDE */}
+      <div
         style={{
           flex: 1,
-          padding: "24px",
-          transition: "margin-left 0.3s ease",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
         }}
       >
-        <Outlet />
-      </main>
+        {/* ✅ TOPBAR — YAHAN HONA ZAROORI HAI */}
+        <DashboardTopbar />
+
+        {/* PAGE CONTENT */}
+        <div
+          style={{
+            flex: 1,
+            padding: "32px",
+            overflowY: "auto",
+          }}
+        >
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }

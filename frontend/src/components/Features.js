@@ -122,8 +122,9 @@ function Features() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
             gap: "32px",
+
             width: "100%",
           }}
         >

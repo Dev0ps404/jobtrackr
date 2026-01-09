@@ -23,7 +23,7 @@ function JobForm({ refresh }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await API.post("/applications", form);
+    await API.post("/api/applications", form);
 
     setForm({
       companyName: "",

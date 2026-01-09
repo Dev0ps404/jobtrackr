@@ -34,6 +34,11 @@ function DashboardTopbar() {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 32px",
+
+        /* ✅ FIX ONLY */
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
       }}
     >
       <h3>Dashboard</h3>
@@ -58,8 +63,14 @@ function DashboardTopbar() {
           {userPhoto && !photoError ? (
             <img
               src={userPhoto}
+              alt="profile"
+              referrerPolicy="no-referrer" // 🔥 GOOGLE IMAGE FIX
               onError={() => setPhotoError(true)}
-              style={{ width: "100%", height: "100%" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
             />
           ) : (
             userName.charAt(0).toUpperCase()
@@ -77,11 +88,12 @@ function DashboardTopbar() {
               borderRadius: "14px",
               boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
               padding: "12px",
-              zIndex: 9999, // 🔥 VERY IMPORTANT
+              zIndex: 9999,
             }}
           >
             <strong>{userName}</strong>
             <p style={{ fontSize: "13px", color: "#64748b" }}>{userEmail}</p>
+
             <button
               onClick={() => navigate("/profile")}
               style={{
@@ -96,6 +108,7 @@ function DashboardTopbar() {
             >
               Profile
             </button>
+
             <button
               onClick={handleLogout}
               style={{

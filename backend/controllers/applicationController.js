@@ -1,9 +1,5 @@
 const Application = require("../models/Application");
 
-console.log("MODEL CHECK 👉", Application);
-
-
-
 /**
  * ➕ Add new application
  * POST /api/applications
@@ -16,6 +12,9 @@ const addApp = async (req, res) => {
         message: "Not authorized, user missing",
       });
     }
+
+    // ✅ SAFE USER ID RESOLUTION
+    const userId = req.user._id ? req.user._id : req.user;
 
     const {
       companyName,
@@ -33,7 +32,6 @@ const addApp = async (req, res) => {
       notes,
     } = req.body;
 
-    // Basic validation
     if (!companyName || !role) {
       return res.status(400).json({
         message: "Company name and role are required",
@@ -41,14 +39,15 @@ const addApp = async (req, res) => {
     }
 
     const application = await Application.create({
-      user: req.user,
+      user: userId,
       companyName,
       role,
       jobType,
       location,
       salary,
       source,
-      applicationDate,
+      applicationDate: new Date(),
+
       deadline,
       priority,
       status,
@@ -67,20 +66,18 @@ const addApp = async (req, res) => {
 };
 
 /**
- * 📥 Get all applications of logged-in user
- * GET /api/applications
- * Private
+ * 📥 Get all applications
  */
 const getApps = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).json({
-        message: "Not authorized",
-      });
+      return res.status(401).json({ message: "Not authorized" });
     }
 
+    const userId = req.user._id ? req.user._id : req.user;
+
     const applications = await Application.find({
-      user: req.user,
+      user: userId,
     }).sort({ createdAt: -1 });
 
     res.json(applications);
@@ -93,31 +90,24 @@ const getApps = async (req, res) => {
 };
 
 /**
- * ✏️ Update an application
- * PUT /api/applications/:id
- * Private
+ * ✏️ Update application
  */
 const updateApp = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).json({
-        message: "Not authorized",
-      });
+      return res.status(401).json({ message: "Not authorized" });
     }
+
+    const userId = req.user._id ? req.user._id : req.user;
 
     const application = await Application.findById(req.params.id);
 
     if (!application) {
-      return res.status(404).json({
-        message: "Application not found",
-      });
+      return res.status(404).json({ message: "Application not found" });
     }
 
-    // Ownership check
-    if (application.user.toString() !== req.user) {
-      return res.status(403).json({
-        message: "Access denied",
-      });
+    if (application.user.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Access denied" });
     }
 
     const updatedApplication = await Application.findByIdAndUpdate(
@@ -136,31 +126,24 @@ const updateApp = async (req, res) => {
 };
 
 /**
- * ❌ Delete an application
- * DELETE /api/applications/:id
- * Private
+ * ❌ Delete application
  */
 const deleteApp = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).json({
-        message: "Not authorized",
-      });
+      return res.status(401).json({ message: "Not authorized" });
     }
+
+    const userId = req.user._id ? req.user._id : req.user;
 
     const application = await Application.findById(req.params.id);
 
     if (!application) {
-      return res.status(404).json({
-        message: "Application not found",
-      });
+      return res.status(404).json({ message: "Application not found" });
     }
 
-    // Ownership check
-    if (application.user.toString() !== req.user) {
-      return res.status(403).json({
-        message: "Access denied",
-      });
+    if (application.user.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Access denied" });
     }
 
     await application.deleteOne();

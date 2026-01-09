@@ -20,6 +20,7 @@ function GoogleLoginButton({ onSuccess }) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userName", data.user.name);
         localStorage.setItem("userEmail", data.user.email);
+        localStorage.setItem("userPhoto", data.user.photo); // 🔥 VERY IMPORTANT
 
         if (onSuccess) onSuccess();
       } catch (err) {
