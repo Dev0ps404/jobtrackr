@@ -23,8 +23,9 @@ function JobForm({ refresh }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await API.post("/api/applications", form);
-    console.log("SUBMIT CLICKED");
+    console.log("SUBMIT CLICKED"); // ✅ button confirm yahin
+
+    await API.post("/applications", form);
 
     setForm({
       companyName: "",
